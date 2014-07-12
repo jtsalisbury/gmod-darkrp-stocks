@@ -20,6 +20,10 @@ stock.RealNameList["T"] = "AT&T Inc."
 stock.StockPullInterval = 45 //pull stock data and update tables every 45 seconds.
 stock.SharesPerStock = 1500 //max number of shares a player can have per stock.
 
+stock.BracketColor = Color(0, 0, 0, 255)
+stock.StockTextColor = Color(255, 25, 25, 255)
+stock.MsgColor = Color(255, 255, 255, 255)
+
 //put this in a shared file: TODO;
 local Player = FindMetaTable("Player");
 

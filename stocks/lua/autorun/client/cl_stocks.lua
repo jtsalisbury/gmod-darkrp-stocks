@@ -28,7 +28,7 @@ net.Receive("StockMenu_Open", function()
 	local action = nil;
 
 	local function PricePerStock(symb)
-		local li = stocklist["query"]["results"]["quote"];
+		local li = stocklist["query"]["results"]["quote"]; //client table
 
 		for k,v in pairs(li) do
 			if (v["Symbol"] == symb) then return v["LastTradePriceOnly"] or 0; end
@@ -172,7 +172,11 @@ net.Receive("StockMenu_Open", function()
 	doit:SetDisabled(true);
 	doit.DoClick = function()
 		if (opt && action && num:GetValue()) then
-			print("SENDSTR");
+			net.Start("Player_ShareActions")
+				net.WriteString(num:GetValue());
+				net.WriteString(opt);
+				net.WriteString(action);
+			net.SendToServer();
 		end
 	end
 	local ba = false; 
@@ -188,7 +192,7 @@ net.Receive("StockMenu_Open", function()
 				draw.RoundedBox(0, 0, 0, doit:GetWide(), doit:GetTall(), colors.open);
 			end
 		end
-		draw.SimpleText("Do it!", "reportBtn", doit:GetWide() / 2, 10, colors.text, TEXT_ALIGN_CENTER);
+		draw.SimpleText("Do it!", "stockBtn", doit:GetWide() / 2, 10, colors.text, TEXT_ALIGN_CENTER);
 	end
 
 	function f:Think()
@@ -214,7 +218,6 @@ net.Receive("StockMenu_Open", function()
 	cancel:SetSize(325, 50);
 	cancel:SetPos(f:GetWide() - 335, f:GetTall() - 60);
 	cancel.DoClick = function()
-		print("close");
 		f:Close();
 	end
 	local ca = false; 
@@ -227,14 +230,20 @@ net.Receive("StockMenu_Open", function()
 			draw.RoundedBox(0, 0, 0, cancel:GetWide(), cancel:GetTall(), colors.cancel);
 		end
 		
-		draw.SimpleText("Cancel", "reportBtn", cancel:GetWide() / 2, 10, colors.text, TEXT_ALIGN_CENTER);
+		draw.SimpleText("Cancel", "stockBtn", cancel:GetWide() / 2, 10, colors.text, TEXT_ALIGN_CENTER);
 	end
 
 	net.Receive("NewStockDataReceived", function()
-		MsgN("New stock data received! Updating layout..");
-		slist:Clear();
-		UpdateList(); //reload the diconlayout
+		if (IsValid(f)) then
+			MsgN("New stock data received! Updating layout..");
+			slist:Clear();
+			UpdateList(); //reload the diconlayout
+		end
 	end)
 end)
 
 
+net.Receive("ChatMsg_CL", function()
+	local msg = net.ReadString();
+	chat.AddText(stock.BracketColor, "[", stock.StockTextColor, "GStock", stock.BracketColor, "] ", stock.MsgColor, msg);
+end)
