@@ -24,6 +24,8 @@ stock.BracketColor = Color(0, 0, 0, 255)
 stock.StockTextColor = Color(255, 25, 25, 255)
 stock.MsgColor = Color(255, 255, 255, 255)
 
+stock.Version = "7-12-14"; //dont edit
+
 //put this in a shared file: TODO;
 local Player = FindMetaTable("Player");
 
