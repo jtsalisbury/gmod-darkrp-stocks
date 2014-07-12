@@ -5,13 +5,13 @@ stock.Stocklist = "GOOG,INTC,VZ,MSFT,KO,DIS,BA,MCD,V,WMT,NKE,T" //Google, Intel,
 stock.RealNameList = {} //because yahoo fucks up stock names
 
 stock.RealNameList["GOOG"] = "Google Inc."
-stock.RealNameList["INTC"] = "Intelligence Corporation"
+stock.RealNameList["INTC"] = "Intel Corporation"
 stock.RealNameList["VZ"] = "Verizon Communications"
 stock.RealNameList["MSFT"] = "Microsoft Corporation"
 stock.RealNameList["KO"] = "Coca-Cola Company"
 stock.RealNameList["DIS"] = "Walt Disney Company"
 stock.RealNameList["BA"] = "Boeing Company"
-stock.RealNameList["MCD"] = "McDick's Corporation"
+stock.RealNameList["MCD"] = "McDonalds Corporation"
 stock.RealNameList["V"] = "Visa Company"
 stock.RealNameList["WMT"] = "Wal-Mart Stores Inc."
 stock.RealNameList["NKE"] = "Nike Inc."
