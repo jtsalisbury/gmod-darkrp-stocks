@@ -5,20 +5,20 @@ stock.Stocklist = "GOOG,INTC,VZ,MSFT,KO,DIS,BA,MCD,V,WMT,NKE,T" //Google, Intel,
 stock.RealNameList = {} //because yahoo fucks up stock names
 
 stock.RealNameList["GOOG"] = "Google Inc."
-stock.RealNameList["INTC"] = "Intel Corporation"
+stock.RealNameList["INTC"] = "Intelligence Corporation"
 stock.RealNameList["VZ"] = "Verizon Communications"
 stock.RealNameList["MSFT"] = "Microsoft Corporation"
 stock.RealNameList["KO"] = "Coca-Cola Company"
 stock.RealNameList["DIS"] = "Walt Disney Company"
 stock.RealNameList["BA"] = "Boeing Company"
-stock.RealNameList["MCD"] = "McDonald's Corporation"
+stock.RealNameList["MCD"] = "McDick's Corporation"
 stock.RealNameList["V"] = "Visa Company"
 stock.RealNameList["WMT"] = "Wal-Mart Stores Inc."
 stock.RealNameList["NKE"] = "Nike Inc."
 stock.RealNameList["T"] = "AT&T Inc."
 
-stock.StockPullInterval = 60 //pull stock data and update tables every 60 seconds.
-stock.SharesPerStock = 1000 //max number of shares a player can have per stock.
+stock.StockPullInterval = 45 //pull stock data and update tables every 45 seconds.
+stock.SharesPerStock = 1500 //max number of shares a player can have per stock.
 
 //put this in a shared file: TODO;
 local Player = FindMetaTable("Player");
