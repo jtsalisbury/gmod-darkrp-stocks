@@ -20,9 +20,9 @@ local colors = {
 	gray_hover = Color(127, 140, 141, 255),
 }
 --[[asdf]]--
-surface.CreateFont("stockHead", {font = "coolvetica", size = 60, weight = 500})
-surface.CreateFont("stockBtn", {font = "coolvetica", size = 30, weight = 500})
-surface.CreateFont("stockBtnSmall", {font = "coolvetica", size = 15, weight = 500})
+surface.CreateFont("stockHead", {font = "OpenSans-Bold", size = 60, weight = 500})
+surface.CreateFont("stockBtn", {font = "OpenSans-Regular", size = 30, weight = 500})
+surface.CreateFont("stockBtnSmall", {font = "OpenSans-Light", size = 15, weight = 500})
 
 local c = nil;
 local frame = nil;
@@ -165,7 +165,7 @@ net.Receive("StockMenu_Open", function()
 			mc:SizeToContents();
 
 			local oc = vgui.Create("DLabel", li);
-			oc:SetText("Previous Open/Close: $"..v["Open"].."/$"..v["PreviousClose"]);
+			oc:SetText("Last Open/Close: $"..v["Open"].."/$"..v["PreviousClose"]);
 			oc:SetPos(10, 150);
 			oc:SetFont("stockBtn");
 			oc:SetTextColor(colors.text);
