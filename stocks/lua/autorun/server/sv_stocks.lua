@@ -66,8 +66,6 @@ hook.Add("Initialize", "PrintStockData", function()
 				print(error)
 			end
 		 );
-			PrintTable(stockdata);
-
 	end)
 end)
 
