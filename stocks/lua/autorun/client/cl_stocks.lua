@@ -16,11 +16,67 @@ local colors = {
 	closed = Color(230, 126, 34, 255),
 	closed_hover = Color(211, 84, 0, 255),
 	info_back = Color(189, 195, 199, 255),
+	gray = Color(189, 195, 199, 255),
+	gray_hover = Color(127, 140, 141, 255),
 }
 --[[asdf]]--
 surface.CreateFont("stockHead", {font = "coolvetica", size = 60, weight = 500})
 surface.CreateFont("stockBtn", {font = "coolvetica", size = 30, weight = 500})
 surface.CreateFont("stockBtnSmall", {font = "coolvetica", size = 15, weight = 500})
+
+local c = nil;
+local frame = nil;
+
+
+
+local function CreateChartMenu(link, name)
+	if (c) then c:Close(); end
+	if (frame) then frame:SetVisible(false); end
+
+	local f = vgui.Create("DFrame");
+	f:SetPos(100, 100);
+	f:SetSize(837, 545);
+	f:SetTitle(" ");
+	f:SetVisible(true);
+	f:MakePopup();
+	f:Center();
+	f.ChartName = name;
+	f:ShowCloseButton(false);
+	f.Paint = function()
+		draw.RoundedBox(0, 0, 0, f:GetWide(), f:GetTall(), colors.back);
+		draw.RoundedBox(0, 0, 0, f:GetWide(), 100, colors.head);
+		draw.SimpleText("Chart for "..name, "stockHead", f:GetWide() / 2, 25, colors.text, TEXT_ALIGN_CENTER);
+	end
+
+	c = f;
+
+	local ht = vgui.Create("DHTML", f);
+	ht:SetSize(f:GetWide() - 20, f:GetTall() - 180);
+	ht:SetPos(10, 110);
+	ht:OpenURL(link);
+
+	local close = vgui.Create("DButton", f);
+	close:SetText("");
+	close:SetSize(f:GetWide() - 20, 50);
+	close:SetPos(10, f:GetTall() - 60);
+	close.DoClick = function()
+		c = nil;
+		frame:SetVisible(true);
+		f:Close();
+	end
+	local ca = false; 
+	function close:OnCursorEntered() ca = true; end
+	function close:OnCursorExited() ca = false; end
+	close.Paint = function()
+		if (ca) then
+			draw.RoundedBox(0, 0, 0, close:GetWide(), close:GetTall(), colors.cancel_hover);
+		else
+			draw.RoundedBox(0, 0, 0, close:GetWide(), close:GetTall(), colors.cancel);
+		end
+		draw.SimpleText("Close", "stockBtn", close:GetWide() / 2, 10, colors.text, TEXT_ALIGN_CENTER);
+	end
+end
+
 
 net.Receive("StockMenu_Open", function()
 	local stocklist = net.ReadTable();
@@ -42,12 +98,14 @@ net.Receive("StockMenu_Open", function()
 	f:SetVisible(true);
 	f:MakePopup();
 	f:Center();
-	f:ShowCloseButton(true);
+	f:ShowCloseButton(false);
 	f.Paint = function()
 		draw.RoundedBox(0, 0, 0, f:GetWide(), f:GetTall(), colors.back);
 		draw.RoundedBox(0, 0, 0, f:GetWide(), 100, colors.head);
 		draw.SimpleText("GStock Market", "stockHead", f:GetWide() / 2, 25, colors.text, TEXT_ALIGN_CENTER)
 	end
+
+	frame = f;
 
 	local pan = vgui.Create("DScrollPanel", f);
 	pan:SetSize(f:GetWide() - 355, f:GetTall() - 120);
@@ -98,6 +156,43 @@ net.Receive("StockMenu_Open", function()
 			pr:SetFont("stockBtn");
 			pr:SetTextColor(colors.text);
 			pr:SizeToContents();
+
+			local mc = vgui.Create("DLabel", li);
+			mc:SetText("Company Worth: $"..v["MarketCapitalization"]);
+			mc:SetPos(10, 115);
+			mc:SetFont("stockBtn");
+			mc:SetTextColor(colors.text);
+			mc:SizeToContents();
+
+			local oc = vgui.Create("DLabel", li);
+			oc:SetText("Previous Open/Close: $"..v["Open"].."/$"..v["PreviousClose"]);
+			oc:SetPos(10, 150);
+			oc:SetFont("stockBtn");
+			oc:SetTextColor(colors.text);
+			oc:SizeToContents();
+
+			local btn = vgui.Create("DButton", li);
+			btn:SetText(" ");
+			btn:SetFont("stockBtnSmall");
+			btn:SetPos(li:GetWide() - 100, 0);
+			btn:SetSize(100, 40);
+			btn.ChartURL = "https://chart.finance.yahoo.com/z?s="..v["Symbol"].."&t=1y&q=&l=&z=l&a=v&p=s&lang=en-US&region=US";
+			btn.SymName = lbl:GetText();
+			btn.DoClick = function()
+				CreateChartMenu(btn.ChartURL, btn.SymName);
+			end
+			local ba = false; 
+			function btn:OnCursorEntered() ba = true; end
+			function btn:OnCursorExited() ba = false; end
+			btn.Paint = function()
+				if (ba) then
+					draw.RoundedBox(0, 0, 0, btn:GetWide(), btn:GetTall(), colors.gray_hover);
+				else
+					draw.RoundedBox(0, 0, 0, btn:GetWide(), btn:GetTall(), colors.gray);
+				end
+				
+				draw.SimpleText("Chart", "stockBtn", btn:GetWide() / 2, 5, colors.text, TEXT_ALIGN_CENTER);
+			end
 		end
 	end
 	UpdateList();
