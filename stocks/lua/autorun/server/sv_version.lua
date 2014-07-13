@@ -1,5 +1,5 @@
 hook.Add("Initialize", "CheckStockVersion", function()
-	local url = "https://github.com/crazyscouter/DarkRP-Stocks/tree/master/stocks/version.txt";
+	local url = "https://raw.githubusercontent.com/crazyscouter/DarkRP-Stocks/master/stocks/version.txt";
 
 	http.Fetch( url,
 		function( body, len, headers, code )
@@ -8,7 +8,8 @@ hook.Add("Initialize", "CheckStockVersion", function()
 			print("------------STOCK------------");
 			print("Your local version is OUT OF DATE! Download a new version here: ");
 			print("https://github.com/crazyscouter/DarkRP-Stocks");
-			print("---------STOCK END----------");
+			print("----------STOCK END----------");
+			print(body);
 		end,
 		function( error )
 			print(error)
