@@ -45,7 +45,7 @@ local function CreateChartMenu(link, name)
 	f.Paint = function()
 		draw.RoundedBox(0, 0, 0, f:GetWide(), f:GetTall(), colors.back);
 		draw.RoundedBox(0, 0, 0, f:GetWide(), 100, colors.head);
-		draw.SimpleText("Chart for "..name, "stockHead", f:GetWide() / 2, 25, colors.text, TEXT_ALIGN_CENTER);
+		draw.SimpleText("Chart for "..name, "stockHead", f:GetWide() / 2, 20, colors.text, TEXT_ALIGN_CENTER);
 	end
 
 	c = f;
@@ -102,7 +102,7 @@ net.Receive("StockMenu_Open", function()
 	f.Paint = function()
 		draw.RoundedBox(0, 0, 0, f:GetWide(), f:GetTall(), colors.back);
 		draw.RoundedBox(0, 0, 0, f:GetWide(), 100, colors.head);
-		draw.SimpleText("GStock Market", "stockHead", f:GetWide() / 2, 25, colors.text, TEXT_ALIGN_CENTER)
+		draw.SimpleText("GStock Market", "stockHead", f:GetWide() / 2, 20, colors.text, TEXT_ALIGN_CENTER)
 	end
 
 	frame = f;
@@ -130,11 +130,20 @@ net.Receive("StockMenu_Open", function()
 			li:SetSize(400, 200);
 			li.Paint = function()
 				draw.RoundedBox(0, 0, 0, li:GetWide(), li:GetTall(), colors.btn);
+			
+				draw.TexturedQuad{
+					texture = surface.GetTextureID("gui/gradient");
+					color = colors.info_back;
+					x = 0,
+					y = 0;
+					w = li:GetWide();
+					h = 40;
+				}
 			end
 
 			local lbl = vgui.Create("DLabel", li);
 			lbl:SetText(stock.RealNameList[v["Symbol"]]);
-			lbl:SetPos(10, 10);
+			lbl:SetPos(10, 5);
 			lbl:SetFont("stockBtn");
 			lbl:SetTextColor(colors.text);
 			lbl:SizeToContents();
@@ -272,6 +281,7 @@ net.Receive("StockMenu_Open", function()
 				net.WriteString(opt);
 				net.WriteString(action);
 			net.SendToServer();
+			f:Close();
 		end
 	end
 	local ba = false; 
@@ -291,8 +301,15 @@ net.Receive("StockMenu_Open", function()
 	end
 
 	function f:Think()
-		if (!opt or !action or !num:GetValue()) then return; end
+		if (!opt or !action or !tonumber(num:GetValue())) then return; end
 		if (doit:GetDisabled()) then doit:SetDisabled(false); end
+		if (string.find(num:GetValue(), "-")) then 
+			cost:SetText("No negative amounts please!");
+			cost:SetSize(320, 70);
+			doit:SetDisabled(true);
+			return;
+		end
+		
 		local key = table.KeyFromValue(stock.RealNameList, opt);
 		local pric = PricePerStock(key);		
 		local pric_tot = (tonumber(pric) * tonumber(num:GetValue()));

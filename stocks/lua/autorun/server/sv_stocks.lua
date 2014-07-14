@@ -70,7 +70,7 @@ hook.Add("Initialize", "PrintStockData", function()
 end)
 
 hook.Add("PlayerSay", "OpenStockMenu", function(ply, text)
-	if (text == "!s") then
+	if (text == stock.ChatCommand) then
 		net.Start("StockMenu_Open");
 			net.WriteTable(stockdata);
 		net.Send(ply);
